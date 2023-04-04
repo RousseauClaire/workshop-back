@@ -77,4 +77,35 @@ exports.deleteContact = (req, res) => {
     });
 }
 
+exports.updateContact = (req, res) => {
+  const contactId = req.params.id;
+  Contact.findByIdAndUpdate(contactId, req.body, { new: true, runValidators: true })
+    .then(updatedContact => {
+      res.status(200).json(new Contact(updatedContact));
+    })
+    .catch(error => {
+      console.error(error);
+      res.status(500).json({ error: 'Erreur du serveur' });
+    });
+}
+
+exports.getContactById = (req, res) => {
+  const contactId = req.params.id;
+  Contact.findById(contactId)
+    .then(doc => {
+      if (doc) {
+        const contact = new Contact(doc);
+        res.status(200).json(contact);
+      } else {
+        res.status(404).json({ error: 'Contact non trouvé' });
+      }
+    })
+    .catch(error => {
+      console.error(error);
+      res.status(500).json({ error: 'Erreur du serveur' });
+    });
+}
+
+
+
 
