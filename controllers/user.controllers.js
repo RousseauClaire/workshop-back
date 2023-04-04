@@ -12,8 +12,11 @@ exports.register = (req, res, next) => {
                 // On crypt le mot de passe
                 bcrypt.hash(req.body.password, 10)
                     .then(mdpHash => {
+                        delete req.body._id;
+                        delete req.body.password;
+                        delete req.body.isAdmin;
                         const userObject = new User({
-                            email: req.body.email,
+                            ...req.body,
                             password: mdpHash,
                             isAdmin: 0
                         });
@@ -79,10 +82,6 @@ exports.modifyUser = (req, res, next) => {
         .then(user => {
             //On vérifie que l'utilisateur ait les droits pour modifier : s'il est admin où si c'est son compte
             if (user.isAdmin || req.params.id == req.auth.userId) {
-                // On ne peut modifier ni les droits ni l'id
-                delete req.body._id;
-                delete req.body.isAdmin;
-
                 // On vérifie que l'e-mail ne soit pas déjà présent en base
                 if (req.body.email && req.body.email !== user.email){
                     User.findOne({email: req.body.email})
@@ -91,9 +90,17 @@ exports.modifyUser = (req, res, next) => {
                             return res.status(400).json({message: "L'identifiant doit être unique"});
                         }})
                 } else {
+                    delete req.body._id;
+                    delete req.body.isAdmin;
+                    if (req.body.password) {
+                        bcrypt.hash(req.body.password, 10)
+                            .then(mdpHash => {
+                                req.body.password = mdpHash;
+                            })
+                    }
                     User.updateOne({_id: req.params.id}, req.body)
                         .then(() => {res.status(200).json({message : "Utilisateur modifié"})})
-                        .catch(error => res.status(400).json({error}))
+                        .catch(error => res.status(400).json({error}));
                 }
             }
             else {
