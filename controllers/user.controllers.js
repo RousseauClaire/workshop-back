@@ -38,6 +38,7 @@ exports.login = (req, res, next) => {
                     // Envoi du token et du userId
                     res.status(200).json({
                         userId: user._id,
+                        isAdmin: user.isAdmin,
                         token: jwt.sign(
                             {userId: user._id},
                             'RANDOM_TOKEN_SECRET',
@@ -72,10 +73,36 @@ exports.getOneUser = (req, res, next) => {
 }
 
 exports.modifyUser = (req, res, next) => {
+    User.findOne({_id: req.auth.userId})
+        .then(user => {
+            //On vérifie que l'utilisateur ait les droits pour modifier : s'il est admin où si c'est son compte
+            if (user.isAdmin || req.params.id == req.auth.userId) {
+                // On ne peut modifier ni les droits ni l'id
+                delete req.body._id;
+                delete req.body.isAdmin;
+                User.updateOne({_id: req.params.id}, req.body)
+                    .then(() => {res.status(200).json({message : "Utilisateur modifié"})})
+                    .catch(error => res.status(400).json({error}))
+            }
+            else {
+                return res.status(401).json({message: "Vous n'avez pas les droits."});
+            }
+        })
+        .catch(error => res.status(400).json({error}));
 }
 
 exports.deleteUser = (req, res, next) => {
-    User.deleteOne({_id: req.params.id})
-        .then(() => {res.status(200).json({message : "User supprimé"})})
-        .catch(error => res.status(400).json({error}))
+    User.findOne({_id: req.auth.userId})
+        .then(user => {
+            //On vérifie que l'utilisateur ait les droits pour supprimer : s'il est admin où si c'est son compte
+            if (user.isAdmin || req.params.id == req.auth.userId) {
+                User.deleteOne({_id: req.params.id})
+                    .then(() => {res.status(200).json({message : "User supprimé"})})
+                    .catch(error => res.status(400).json({error}))
+            }
+            else {
+                return res.status(401).json({message: "Vous n'avez pas les droits."});
+            }
+        })
+        .catch(error => res.status(400).json({error}));
 }
