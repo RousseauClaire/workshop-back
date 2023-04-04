@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
 const actionSchema = mongoose.Schema({
-    type: {type: Boolean, required: true},
-    status: {type: Boolean, required: true},
+    type: {type: Boolean, required: true, enum: ["envoyée", "reçue"]},
+    status: {type: Boolean, required: true, enum: ["non commencée", "terminée"]},
     date: {type: Date, required: true},
     reminderTime: {type: TimeRanges},
     subject: {type: String},
