@@ -6,6 +6,7 @@ const contactRoutes = require('./routes/contact.route')
 const userRoutes = require('./routes/user.route')
 const actionRoutes = require('./routes/action.route')
 const mediaRoutes = require('./routes/media.route')
+const relationRoutes = require('./routes/relation.route')
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.use('/api/contact', contactRoutes);
 //app.use('/api/action', actionRoutes);
 app.use('/api/media', mediaRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/relation', relationRoutes);
 
 // Document Swagger
 app.use('/api-docs',

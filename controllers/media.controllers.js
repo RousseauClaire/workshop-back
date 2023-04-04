@@ -68,7 +68,6 @@ exports.deleteMedia = (req, res, next) => {
         .then(user => {
             //On vérifie que l'utilisateur soit admin
             if (user.isAdmin) {
-                delete req.body._id;
                 Media.deleteOne({_id: req.params.id})
                     .then(() => {res.status(200).json({message : "Media supprimé"})})
                     .catch(error => res.status(400).json({error}))
