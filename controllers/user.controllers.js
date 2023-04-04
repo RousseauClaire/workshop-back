@@ -80,9 +80,19 @@ exports.modifyUser = (req, res, next) => {
                 // On ne peut modifier ni les droits ni l'id
                 delete req.body._id;
                 delete req.body.isAdmin;
-                User.updateOne({_id: req.params.id}, req.body)
-                    .then(() => {res.status(200).json({message : "Utilisateur modifié"})})
-                    .catch(error => res.status(400).json({error}))
+
+                // On vérifie que l'e-mail ne soit pas déjà présent en base
+                if (req.body.email && req.body.email !== user.email){
+                    User.findOne({email: req.body.email})
+                    .then(user => {
+                        if (user) {
+                            return res.status(400).json({message: "L'identifiant doit être unique"});
+                        }})
+                } else {
+                    User.updateOne({_id: req.params.id}, req.body)
+                        .then(() => {res.status(200).json({message : "Utilisateur modifié"})})
+                        .catch(error => res.status(400).json({error}))
+                }
             }
             else {
                 return res.status(401).json({message: "Vous n'avez pas les droits."});
