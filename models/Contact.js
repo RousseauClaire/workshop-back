@@ -7,8 +7,8 @@ const contactSchema = mongoose.Schema({
     fax: {type: String},
     address: {type: String},
     status: {type: String, required: true, enum: ["lead", "lead mort", "prospect", "prospect mort", "client"]},
-    contactType: {type: Boolean, required: true, enum: ["B2B", "B2C"]},
-    comment: {type: Text},
+    contactType: {type: String, required: true, enum: ["B2B", "B2C"]},
+    comment: {type: String},
 });
 
 module.exports = mongoose.model('Contact', contactSchema);
