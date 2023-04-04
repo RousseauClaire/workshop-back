@@ -28,7 +28,7 @@ app.use(express.json());
 
 app.use('/api/contact', contactRoutes);
 //app.use('/api/action', actionRoutes);
-//app.use('/api/media', mediaRoutes);
+app.use('/api/media', mediaRoutes);
 app.use('/api/user', userRoutes);
 
 // Document Swagger

@@ -8,20 +8,22 @@ exports.register = (req, res, next) => {
         .then(user => {
             if (user) {
                 return res.status(400).json({message: "L'identifiant doit être unique"});
-            }})
-    // On crypt le mot de passe
-    bcrypt.hash(req.body.password, 10)
-        .then(mdpHash => {
-            const user = new User({
-                email: req.body.email,
-                password: mdpHash,
-                isAdmin: 0
-            });
-            user.save()
-                .then(() => {res.status(201).json({message: "Utilisateur créé !"})})
-                .catch(error => res.status(400).json({error}));
+            } else {
+                // On crypt le mot de passe
+                bcrypt.hash(req.body.password, 10)
+                    .then(mdpHash => {
+                        const userObject = new User({
+                            email: req.body.email,
+                            password: mdpHash,
+                            isAdmin: 0
+                        });
+                        userObject.save()
+                            .then(() => {res.status(201).json({message: "Utilisateur créé !"})})
+                            .catch(error => res.status(400).json({error}));
+                    })
+                    .catch(error =>res.status(500).json({error}));
+            }
         })
-        .catch(error =>res.status(500).json({error}));
 }
 
 exports.login = (req, res, next) => {

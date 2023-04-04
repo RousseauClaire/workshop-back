@@ -3,10 +3,10 @@ const router = express.Router();
 const userController = require("../controllers/user.controllers");
 const auth = require('../middlewares/auth');
 
-// Create a user
+// Create an user
 router.post('/register', userController.register);
 
-// Connect a user
+// Connect an user
 router.put('/login', userController.login);
 
 // Get self profile informations
