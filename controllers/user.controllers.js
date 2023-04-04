@@ -3,6 +3,11 @@ const jwt = require('jsonwebtoken');
 const User = require("../models/User");
 
 exports.register = (req, res, next) => {
+    User.findOne({email: req.body.email})
+        .then(user => {
+            if (user) {
+                return res.status(400).json({message: "L'identifiant doit être unique"});
+            }})
     bcrypt.hash(req.body.password, 10)
         .then(mdpHash => {
             const user = new User({
@@ -23,7 +28,6 @@ exports.login = (req, res, next) => {
             if (!user) {
                 return res.status(401).json({message: "Utilisateur ou mot de passe incorrect"});
             }
-            console.log("Utilisateur correct");
             bcrypt.compare(req.body.password, user.password)
                 .then(valid => {
                     if (!valid) {
