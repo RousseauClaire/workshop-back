@@ -20,4 +20,12 @@ router.get('/prospects', contactController.getProspects);
 // Get contacts type as clients
 router.get('/clients', contactController.getClients);
 
+// Modifiy contact
+router.put('/update-contact/:id', contactController.updateContact);
+
+// Get contact by id
+router.get('/contact/:id', contactController.getContactById);
+
+
+
 module.exports = router;
