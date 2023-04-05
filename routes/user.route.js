@@ -10,18 +10,18 @@ router.post('/register', userController.register);
 router.put('/login', userController.login);
 
 // Get self profile informations
-router.get('/profile', auth, userController.getProfile);
+router.get('/profile', userController.getProfile);
 
 // Get all users
-router.get('/', auth, userController.getAllUsers);
+router.get('/', userController.getAllUsers);
 
 // Get an user
-router.get('/:id', auth, userController.getOneUser);
+router.get('/:id', userController.getOneUser);
 
 // Modify an user
-router.put('/:id', auth, userController.modifyUser);
+router.put('/:id', userController.modifyUser);
 
 // Delete an user
-router.delete('/:id', auth, userController.deleteUser);
+router.delete('/:id', userController.deleteUser);
 
 module.exports = router;

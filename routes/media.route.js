@@ -4,18 +4,18 @@ const mediaController = require("../controllers/media.controllers");
 const auth = require('../middlewares/auth');
 
 // Create a media
-router.post('/create', auth, mediaController.create);
+router.post('/create', mediaController.create);
 
 // Get all medias
-router.get('/', auth, mediaController.getAllMedias);
+router.get('/', mediaController.getAllMedias);
 
 // Get a media
-router.get('/:id', auth, mediaController.getOneMedia);
+router.get('/:id', mediaController.getOneMedia);
 
 // Modify a media
-router.put('/:id', auth, mediaController.modifyMedia);
+router.put('/:id', mediaController.modifyMedia);
 
 // Delete a media
-router.delete('/:id', auth, mediaController.deleteMedia);
+router.delete('/:id', mediaController.deleteMedia);
 
 module.exports = router;
