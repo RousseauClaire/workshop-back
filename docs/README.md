@@ -6,3 +6,4 @@ Cette décision vient du constat que les nombreux CRM open source déjà disponi
 
 Vous trouverez dans ce document la présentation de la partie back de notre projet ainsi que son installation.
 
+Pour la partie front le readme se trouve dans le repository suivant: [Front](https://github.com/piloc01/workshop-front)
